@@ -1,0 +1,17 @@
+1. Ta reda på vilken cloud service provider som tre av de tjänster du konsumerar använder. Oscar beskriver sina tre tjänster i Grundläggande om molnet .
+
+Reddit använder främst AWS men även olika funktionaliteter från andra cloud providers, exempelvis Google BigQuery https://www.reddit.com/r/aws/comments/ecf5i3/were_reddits_infrastructure_team_ask_us_anything/
+Discord använder google cloud https://www.cloudflare.com/case-studies/discord
+Zoom har gått över till att använda AWS nyligen från att tidigare ha använt Oracle Cloud Infrastructure
+
+2. Vilka för- och nackdelar finns med att använda JSON som datautvecklingsformat för ett API (jämfört med XML)?
+
+3. Vad är skillnaden på IAAS och PAAS tjänster? Ge exempel på scenarion då det är fördelaktigt att välja den ena över den andre.
+
+4. Vad är fördelar med Serverless arkitekturen?
+
+5. Vad är fördelen med virtualisering till exempel Docker?
+
+6. Ditt API gör succé! Särskilt vid årsskiftet märks en avsevärt högre mängd anrop. På vilka sätt skulle man kunna hantera dessa trafik- och belastningsförändringar?
+
+7. Ditt API har blivit en grundläggande del i många bolags basbehov och kravet på hög tillgänglighet ökar. På vilka sätt skulle man kunna förstärka den tillgänglighet som din tjänst har idag?
