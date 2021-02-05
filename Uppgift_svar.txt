@@ -5,13 +5,32 @@ Discord använder google cloud https://www.cloudflare.com/case-studies/discord
 Zoom har gått över till att använda AWS nyligen från att tidigare ha använt Oracle Cloud Infrastructure
 
 2. Vilka för- och nackdelar finns med att använda JSON som datautvecklingsformat för ett API (jämfört med XML)?
+Fördelar:
+* JSON kräver ofta mindre minne för att lagra samma mängd data, vilket tillåter snabbare överförsel av data och mer effektiv minnesanvändning
+* JSON har inbyggt stöd i många av de programmeringsspråk som används vid webutveckling, främst javascript, vilket gör det lättare för utvecklare att skapa API:er som hanterar JSON
+* JSON har stöd för listor
+Nackdelar:
+* JSON har inte stöd för markup, vilket gör att det kräver förprocessering innan datan kan visas för användare
+* JSON har endast stöd för UTF-8, vilket är tillräckligt i de flesta fall, men det kan finnas scenarion där man vill ha stöd för andra kodningstyper.
 
 3. Vad är skillnaden på IAAS och PAAS tjänster? Ge exempel på scenarion då det är fördelaktigt att välja den ena över den andre.
+IaaS - Infrastructure as a service, innebär att man får tillgång till hårdvara och all infrastruktur runt hårdvaran, men att man själv är ansvarig för att hantera det som körs på hårdvaran, dvs. operativsystem och andra miljöer.
+PaaS - Platform as a service, innebär att man får tillgång till en platform, vilket innebär förinstallerat operativsystem och andra miljöer, och man är då enbart ansvarig för sin egen kod och datalagring.
+Fördelen med PaaS är att man inte behöver lägga tid på att hålla maskiner uppdaterade och hantera problem som kan uppstå pga. miljön man kör i.
+Fördelen med IaaS är att man har större kontroll över miljön man kör sitt program i.
 
 4. Vad är fördelar med Serverless arkitekturen?
+ Det är lättare att skala sitt program då man inte är bunden till en maskin, utan ens kod kan lätt köras på flera olika maskiner och flyttas mellan dessa. En annan fördel med serverless är att man enbart behöver betala för den mängd beräkningskraft man behöver och lättare kan anpassa detta efterhand som behoven ökar. Det går även snabbare att skala ut applikationer på en serverless arkitektur, då de ofta inte behöver starta upp en helt ny maskin.
 
 5. Vad är fördelen med virtualisering till exempel Docker?
+Bättre användning av resurser då en VM kan delas upp i flera containers, ytterligare ett abstraktionslager som gör att utvecklare kan fokusera på att koda. Det är lättare att flytta sin applikation mellan olika maskiner och därmed reducera risken för downtime. Man behöver inte bry sig om att konfigurera upp miljön varje gång man behöver skala, utan samma container kommer fungera överallt.
 
 6. Ditt API gör succé! Särskilt vid årsskiftet märks en avsevärt högre mängd anrop. På vilka sätt skulle man kunna hantera dessa trafik- och belastningsförändringar?
+    1. Till att börja med så hade man kunnat sätta upp en databas där man kan lagra produktdatan för att inte behöva göra ett extern api-anrop varje gång. Man kan istället anropa api:et med regelbundna intervall för att hämta eventuella uppdateringar.
+    2. Man kan sätta upp en cache mellan databasen och webappen för att kunna hämta data ännu snabbare, denna hade bl.a. kunnat lagra resultatet från de vanligaste sökningarna.
+    3. Skala ut och skala upp. Beroende på var flaskhalsen sitter så kan det vara till stor hjälp att antingen öka antalet maskiner som kan behandla förfrågningar, eller att öka kraften på de indiviuella maskinerna som behandlar frågorna. I fallet då man skalar ut så hjälper en cache även till med att minska belastningen på databasen.
+    4. Effektivare kod. Om man byter till ett kompilerat språk, t.ex. c++, så kan det minska tiden det tar att behandla varje förfrågan, och därmed öka kapaciteten. Man hade även kunnat tänka sig att blanda så att allt som har med webserverhantering hanteras av python och all tung beräkning hanteras i c/c++.
 
 7. Ditt API har blivit en grundläggande del i många bolags basbehov och kravet på hög tillgänglighet ökar. På vilka sätt skulle man kunna förstärka den tillgänglighet som din tjänst har idag?
+En enkel lösning är att se till så att man har flera maskiner som kör applikationen, så att om en går ner så kan all trafik dirigeras om till en av de andra medans man startar upp en ny.
+En lösning om hela molntjänsten går ner är att använda flera cloud service providers för att köra applikationen och om en skulle gå ner helt så kan man enkelt omdirigera sin DNS till den andra. Eftersom många har en "Pay per use" så behöver det inte kosta något att ha en backup på ett annat ställe så länge man inte använder den.
