@@ -1,0 +1,50 @@
+1.
+Jag började med att undersöka hur api:et för cognitive services fungerade och vilken data man skulle skicka in och hur datan man fick tillbaka såg ut för de olika verktygen.
+Sedan kopplade jag ihop vision-modulen med translate-modulen och såg till att dessa kunde fungera tillsammans.
+Efter det så ändrade jag i min get_data och delade upp den i två, get_data och process_data för att lätta kunna anpassa datan från lager-api:et till uppgiften och datan som cognitive services gav.
+Slutligen så kopplade jag ihop detta med input från hemsidan och rendering av resultatet, samt la till felhantering.
+
+2.
+Jag började med att följa instruktionen som länkades i uppgiften. Där stötte jag på problem med att containern inte startade.
+Då dubbelkollade jag i Dockerfile och la till raderna:
+COPY . .
+CMD ["npm", "start"]
+När jag nu försökte starta containern klagade den på att nodemon saknades, så jag ändrade i package.json så att den använder vanliga node istället, då hot-reload inte behövs här.
+Återigen så blev det fel när jag försökte starta containern, denna gången klagade den på att config.secret inte fanns i config/config.json, så jag la till denna.
+Slutligen så lyckades containerns starta, och jag deployade den i min app-service. Här upptäckte jag att den hade problem att utföra warmup-requesten, då api:et körde på port 8111, men azure försökte nå den på port 80.
+Så jag ändrade så att api:et kör på port 80 i app.js och deployade igen. Äntligen så fungerade det!
+
+3.
+    1. Du slipper själv köpa in och administera en server, vilket både kräver tid, kunskap och fysiskt utrymme
+    2. Det blir billigare då du endast betalar för prestandan du behöver för stunden istället för att dimensionera för den maximala prestandan du kommer behöva
+    3. Du får bättre tillgänglighet då du kan sprida ut ditt program på flera maskiner, vilket minskar risken för att systemet går ner när en maskin kraschar
+    4. Det går snabbt att sätta upp prototyper och liknande
+    5. Utvecklarna kan fokusera på utveckling istället för serverkonfiguration
+
+4.
+    1. Du är beroende av någon annas infrastruktur för att köra ditt program
+    2. Om molntjänsten inte kan garantera att servern ligger inom EU kan det skapa problem med GDPR
+    3. Du har mindre kontroll över hur servern är konfigurerad
+    4. Eftersom all kommunikation måste ske över internet så kan det bli långsammare än om det sker över ett intranät, t.ex. för videoredigering
+
+5. 
+    1. Man kan begränsa antalet requests som en server kan göra till sitt api per tidsenhet, vilket kan förhindra höga kostnader om någon skulle (medvetet eller omedvetet) missanvända API:et och skicka jättemånga requests samtidigt.
+    2. Det ger ett bra interface mellan ens interna tjänster och andra externa tjänster, vilket underlättar för båda parter.
+    3. Det underlättar validering och authentiering av användare av API:et.
+    4. Det är lättare att hantera alla sina API på ett ställe, istället för att behöva hantera varje API för sig.
+
+6.
+Den låga gränsen på antalet requests/minut till cognitive services gjorde det svårt att snabbt testa om ändringarna man gjorde i koden fungerade, vilket ledde
+till att man spenderade mycket tid på att vänta tills man kunde använda tjänsterna igen. Förutom det fanns det inga större svårigheter.
+
+7.
+Projektet gick generellt bra att genomföra. Som tidigare nämnt så var det lite strul med att få igån lager-api:et, men efter lite googlande och pillande så löste det sig.
+Jag hade gärna sett att man höjde gränsen för antalet requests till cognitive services till kanske 20-30 per minut istället, kan tänka mig att problemet blir ännu mer påtagligt när det är flera som sitter och utvecklar samtidigt.
+Eftersom jag sedan tidigare har rätt mycket erfarenhet av Flask så gick det snabbt att sätta upp endpointen och skapa templaten, som lite extra utmaning så implementerade jag bootstrap, vilket jag inte har jobbat  med tidigare.
+Med tanke på det vi har lärt oss i kursen hittills känns det som ett rimligt projekt.
+
+8.
+Jag tror att detta är en väldigt nyttig kurs som vi kommer ha stor användning av i framtiden. Jag hade gärna sett att detta blir en 6hp kurs som går in mer nyanserat på djupet,
+t.ex. databashantering med connectionsträngar, konfigurationssträngar, hur man bygger skalbara applikationer, hur man ska tänka kring resource groups i större projekt, monitorering med Application insights,
+osv. Det känns även som att det har varit lite föreläsningstid när vi har en föreläsning i veckan där endast hälften av tiden används för föreläsningen, så där hade man kunnat klämma in mer material.
+Så en bra sammanfattning kan vara: Väldigt bra, nyttig och intressant kurs, men för översiktlig. Jag ger kursen 6/10.
